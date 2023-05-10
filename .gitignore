@@ -1,0 +1,25 @@
+## Ignore STM32 CubeIDE temporary files and build results
+# 
+
+
+#Build Directories
+[Dd]ebug/
+[Rr]elease/
+
+#Build Results
+*.o
+*.d
+*.eep
+*.elf
+*.hex
+*.map
+*.mk
+*.su
+
+#Block Metadata
+*.metadata
+
+
+
+#User Specific Files
+*.launch
