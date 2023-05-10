@@ -42,7 +42,7 @@ extern "C" {
 #include "gpio.h"
 
 // Private includes ...........................................................
-
+#include "debug.h"
 
 
 
