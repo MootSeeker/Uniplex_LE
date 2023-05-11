@@ -32,13 +32,17 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+// Global includes ............................................................
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+
 // CubeMx includes ............................................................
 #include "crc.h"
 #include "i2c.h"
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
-#include "usb_device.h"
 #include "gpio.h"
 
 // Private includes ...........................................................
@@ -158,6 +162,69 @@ void Error_Handler(void);
 #define TOUCH_SDA_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
+
+// ..........................................................................................................
+/**
+ * @brief  Universal usable union for integer data values
+ */
+typedef union _union32
+{
+	/* Example 0x12345678 stored as uint32
+	 *                  MSB            LSB         MSB            LSB
+     * as_uint32:     | B3 | B2 | B1 | B0 |  =>  | 12 | 34 | 56 | 78 |
+     * as_uint16[0]:            | B1 | B0 |                | 56 | 78 |
+     * as_uint16[1]:  | B3 | B2 |                | 12 | 34 |
+     * as_uint8[0]:                  | B0 |                     | 78 |
+     * as_uint8[1]:             | B1 |                     | 56 |
+     * as_uint8[2]:        | B2 |                     | 34 |
+     * as_uint8[3]:   | B3 |                     | 12 |
+     */
+	uint32_t as_uint32;     // 1 * 4 byte
+    uint16_t as_uint16[2];  // 2 * 2 byte
+    uint8_t  as_uint8[4];   // 4 byte
+} union_uint32_type;
+
+// ..........................................................................................................
+/**
+ * @brief  Universal usable union for float data values
+ */
+typedef union _unionf32
+{
+    /* Example 1.234 ( = 0x3F9DF3B6 : IEEE-754) stored as float
+     *                                                                     MSB            LSB
+     * as_float:      | SEEEEEEE | EMMMMMMM | MMMMMMMM | MMMMMMMM |  =>  | 3F | 9D | F3 | B6 |
+     * as_uint32:     | SEEEEEEE | EMMMMMMM | MMMMMMMM | MMMMMMMM |  =>  | 3F | 9D | F3 | B6 |
+     * as_uint16[0]:                        | MMMMMMMM | MMMMMMMM |                | F3 | B6 |
+     * as_uint16[1]:  | SEEEEEEE | EMMMMMMM |                            | 3F | 9D |
+     * as_uint8[0]:                                    | MMMMMMMM |                     | B6 |
+     * as_uint8[1]:                         | MMMMMMMM |                           | F3 |
+     * as_uint8[2]:              | EMMMMMMM |                                 | 9D |
+     * as_uint8[3]:   | SEEEEEEE |                                       | 3F |
+     */
+	float    as_float;      // 1 * 4 byte (IEEE format)
+	uint32_t as_uint32;     // 1 * 4 byte
+	uint16_t as_uint16[2];  // 2 * 2 byte
+    uint8_t  as_uint8[4];   // 4 byte
+} union_float_type;
+
+// .........................................................................................................
+/**
+ * @brief  Universal usable macros
+ */
+#define FALSE                         0  // Boolean false
+#define TRUE                          1  // Boolean true
+#define OFF                           0  // Boolean OFF
+#define ON                            1  // Boolean ON
+#define LOW                           0  // Boolean LOW
+#define HIGH                          1  // Boolean HIGH
+#define FOREVER                       1  // Forever (while loop)
+#define FLOAT_NAN            0x7FFFFFFF  // Invalid float value
+
+#define TAB                        0x09  // Tabulator value
+
+#ifdef DEBUG_TERMINAL
+#define WELCOME_MESSAGE "-------------------------- 11336 HL-2P Prototype -----------------------------"
+#endif
 
 /* USER CODE END Private defines */
 

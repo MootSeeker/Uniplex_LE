@@ -48,6 +48,24 @@
  * Section for module-specific definitions (constants) and macros
  */
 
+/**
+ * @brief  Global release of debug information
+ */
+#define DEBUG_ON         // Global release of debug information
+
+/**
+ * @brief   Activate or deactivate different debug modes
+ */
+#ifdef DEBUG_ON
+#define DEBUG_TERMINAL	   // Show debug project name
+#endif
+
+/**
+ * @brief  Definitions for debug actions
+ */
+#define DEBUG_STRING_LEN_MAX   100  // Maximal length of debug character buffer
+
+
  
  // ********************************************************************************
  /**
@@ -80,5 +98,22 @@
  * Section for module-specific global function prototypes
  */
  
+/**
+ * @brief  Debug function: Similar to the printf command for data output via UART interface
+ * @note   - Select right UART interface!
+ * @param  List of parameters, same as in printf function
+ * @retval none
+ */
+void debug_printf( const char *format, ... );
+
+/**
+ * @brief  Debug function: Similar to the printf command for data output via UART interface
+ * @note   - Select right UART interface!
+ * @note   - Without Carriage Return and Line Feed at the end
+ * @param  List of parameters, same as in printf function
+ * @retval none
+ */
+void debug_printf_without_cr_lf( const char *format, ... );
+
 
  #endif /* END: debug.h */
