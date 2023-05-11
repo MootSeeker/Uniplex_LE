@@ -56,6 +56,15 @@
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
+// .............................................................................
+/**
+ * @brief 	Init function
+ *
+ * @param 	none
+ * @retval 	none
+ */
+void sys_init( void );
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -102,6 +111,9 @@ int main(void)
   MX_USART3_UART_Init();
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
+
+  // Init system
+  sys_init( );
 
   /* USER CODE END 2 */
 
@@ -171,6 +183,25 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+// .............................................................................
+/**
+ * @brief 	Init function
+ *
+ * @param 	none
+ * @retval 	none
+ */
+void sys_init( void )
+{
+
+}
+
+
+
+
+
+
+
 
 /* USER CODE END 4 */
 
