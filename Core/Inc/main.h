@@ -47,6 +47,7 @@ extern "C" {
 
 // Private includes ...........................................................
 #include "debug.h"
+#include "revision.h"
 
 
 
