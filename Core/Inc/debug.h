@@ -74,6 +74,19 @@
  * Section for module-specific enumerations
  */
 
+/// @brief  Possible STM32 system reset causes
+typedef enum
+{
+	RESET_CAUSE_UNKNOWN,
+    RESET_CAUSE_LOW_POWER_RESET,
+    RESET_CAUSE_WINDOW_WATCHDOG_RESET,
+    RESET_CAUSE_INDEPENDENT_WATCHDOG_RESET,
+    RESET_CAUSE_SOFTWARE_RESET,
+    RESET_CAUSE_POWER_ON_POWER_DOWN_RESET,
+    RESET_CAUSE_EXTERNAL_RESET_PIN_RESET,
+    RESET_CAUSE_BROWNOUT_RESET,
+} enReset_cause_t;
+
  
  // ********************************************************************************
  /**
@@ -115,5 +128,22 @@ void debug_printf( const char *format, ... );
  */
 void debug_printf_without_cr_lf( const char *format, ... );
 
+/**
+ * @brief  Debug function: Get Reason that reset occured
+ * @note
+ * @note
+ * @param  none
+ * @retval List of parameters, reasons
+ */
+enReset_cause_t reset_get( void );
+
+/**
+ * @brief  Obtain the system reset cause as an ASCII-printable name string
+ * 		   from a reset cause type
+ * @note
+ * @param  reset_cause     The previously-obtained system reset cause
+ * @retval A null-terminated ASCII name string describing the system reset cause
+ */
+const char * reset_cause_get_name(enReset_cause_t reset_cause);
 
  #endif /* END: debug.h */

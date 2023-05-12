@@ -150,14 +150,8 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.MSIState = RCC_MSI_ON;
   RCC_OscInitStruct.MSICalibrationValue = 0;
-  RCC_OscInitStruct.MSIClockRange = RCC_MSIRANGE_6;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_MSI;
-  RCC_OscInitStruct.PLL.PLLM = 1;
-  RCC_OscInitStruct.PLL.PLLN = 40;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV7;
-  RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
-  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
+  RCC_OscInitStruct.MSIClockRange = RCC_MSIRANGE_7;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -167,12 +161,12 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_MSI;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
   {
     Error_Handler();
   }
@@ -196,7 +190,7 @@ void sys_init( void )
 	uint32_t reset  = 0;
 
 	// Get initial tick if debug is enabled
-	#ifdef DEBUG_TERMINAL
+	#ifdef DEBUG_ON
 	uint32_t init_time = HAL_GetTick( );
 	#endif
 
@@ -220,11 +214,11 @@ void sys_init( void )
 	debug_printf( WELCOME_MESSAGE );
 
 	// Show Revision
-	debug_printf( "-> FW-Revision: %s", REVISION );
+	debug_printf( "-> FW-Revision: %d", REVISION );
 	// Show reset source
-	debug_printf( "-> Reset Value: 0x%.4X", reset );
+	debug_printf( "-> Reset Value: %s", reset_cause_get_name(reset_get( )));
     // Show Clock Speed
-    debug_printf( "-> Clock: %d\r\n", HAL_RCC_GetSysClockFreq() );
+    debug_printf( "-> Clock: %d", HAL_RCC_GetSysClockFreq() );
     // Print if FPU is enabled
     debug_printf( "-> FPU: %s", (fpu) ? "enabled" : "disabled");
     // Initialization starts here
@@ -236,11 +230,11 @@ void sys_init( void )
 
     // END: Initialization ...................................................................................
 
-    // Print init information .................................................................................
+    // Print init information ................................................................................
 	#ifdef DEBUG_TERMINAL
 	// Print time it took
-	debug_printf("--> Initialsization time: %lu ms", HAL_GetTick( ) - init_time);
-	// Initialization ok
+	debug_printf("--> Initialization time: %lu ms", HAL_GetTick( ) - init_time);
+	// Initialization OK
 	debug_printf( "-> Hardware initialized\r\n" );
 	#endif
 }
