@@ -1,6 +1,10 @@
 # Uniplex_LE
 Lightweight version of Uniplex system
 
+"Uniplex LE" ist ein Github-Repository, das eine Firmware für die Plattform mit einem STM32-Mikrocontroller enthält.
+Die Firmware ermöglicht die Steuerung und Integration verschiedener Komponenten wie TFT-Touchscreen-Display, RTC, USB- und NFC-Schnittstellen, Bluetooth-Kommunikation sowie Temperatur- und Feuchtigkeitssensoren.
+Das Hauptziel des Projekts ist es, eine energieeffiziente Lösung mit niedrigem Stromverbrauch zu entwickeln, was besonders für batteriebetriebene Anwendungen von Vorteil ist.
+
 ## Inhaltsverzeichnis
 
 - [Beschreibung](#beschreibung)
