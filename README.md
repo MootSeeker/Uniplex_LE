@@ -1,10 +1,6 @@
 # Uniplex_LE
 Lightweight version of Uniplex system
 
-# Projektname
-
-Kurze Beschreibung des Projekts oder der Anwendung.
-
 ## Inhaltsverzeichnis
 
 - [Beschreibung](#beschreibung)
