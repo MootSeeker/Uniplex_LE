@@ -227,6 +227,11 @@ void sys_init( void )
 
     // Start: Initialization .................................................................................
 
+    // Init Flash
+    if( W25QXX_OK != w25qxx_init( ))
+    {
+    	// Show Error message
+    }
 
     // END: Initialization ...................................................................................
 
