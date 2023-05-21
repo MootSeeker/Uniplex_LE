@@ -8,6 +8,27 @@
 #ifndef INC_AT25QF128A_H_
 #define INC_AT25QF128A_H_
 
+//...........................................................................................................
+/**
+ * @brief  FLASH page size
+ */
+#define FLASH_PAGE_256              256  // FLASH page size (256 byte)
+
+//...........................................................................................................
+/**
+ * @brief  Initialization commands for FLASH AT45DB021E (128kbyte, 256 page size)
+ */
+#define FLASH_INIT_1               0x3D  // Byte 1
+#define FLASH_INIT_2               0x2A  // Byte 2
+#define FLASH_INIT_3               0x80  // Byte 3
+#ifdef FLASH_PAGE_256
+  #define FLASH_INIT_4             0xA6  // Byte 4 for 256 byte/page
+  #define FLASH_P_SIZE              256  // Page size 256 bytes
+#else
+  #define FLASH_INIT_4             0xA7  // Byte 4 for 264 byte/page
+  #define FLASH_P_SIZE              264  // Page size 264 byte
+#endif
+
 /**
   * @brief  N25Q128A Configuration
   */
@@ -19,9 +40,9 @@
 #define N25Q128A_DUMMY_CYCLES_READ           8
 #define N25Q128A_DUMMY_CYCLES_READ_QUAD      10
 
-#define N25Q128A_BULK_ERASE_MAX_TIME         250000
-#define N25Q128A_SECTOR_ERASE_MAX_TIME       3000
-#define N25Q128A_SUBSECTOR_ERASE_MAX_TIME    800
+#define FLASH_TOUT_CE         250000
+#define FLASH_TOUT_SE       3000
+#define FLASH_TOUT_BE    800
 
 /**
   * @brief  N25Q128A Commands
@@ -32,12 +53,12 @@
 
 /* Identification Operations */
 #define READ_ID_CMD                          0x9E
-#define READ_ID_CMD2                         0x9F
+#define FLASH_DEVICE_INFO                         0x9F
 #define MULTIPLE_IO_READ_ID_CMD              0xAF
 #define READ_SERIAL_FLASH_DISCO_PARAM_CMD    0x5A
 
 /* Read Operations */
-#define READ_CMD                             0x03
+#define FLASH_READ_PAGE                      0x03
 #define FAST_READ_CMD                        0x0B
 #define DUAL_OUT_FAST_READ_CMD               0x3B
 #define DUAL_INOUT_FAST_READ_CMD             0xBB
@@ -49,7 +70,7 @@
 #define WRITE_DISABLE_CMD                    0x04
 
 /* Register Operations */
-#define READ_STATUS_REG_CMD                  0x05
+#define FLASH_READ_STATUS                  0x05
 #define WRITE_STATUS_REG_CMD                 0x01
 
 #define READ_LOCK_REG_CMD                    0xE8
@@ -68,7 +89,7 @@
 #define WRITE_ENHANCED_VOL_CFG_REG_CMD       0x61
 
 /* Program Operations */
-#define PAGE_PROG_CMD                        0x02
+#define FLASH_WRITE_PAGE                     0x02
 #define DUAL_IN_FAST_PROG_CMD                0xA2
 #define EXT_DUAL_IN_FAST_PROG_CMD            0xD2
 #define QUAD_IN_FAST_PROG_CMD                0x32
@@ -130,10 +151,113 @@
 
 //...........................................................................................................
 /**
+ * @brief  Macros for chip select pin
+ */
+// Macro: Set nFLASH_CS active low
+#define mFLASH_CS_ON    ( HAL_GPIO_WritePin( FLASH_CS_GPIO_Port, FLASH_CS_Pin, GPIO_PIN_RESET) )
+// Macro: Set nFLASH_CS inactive high
+#define mFLASH_CS_OFF   ( HAL_GPIO_WritePin( FLASH_CS_GPIO_Port, FLASH_CS_Pin, GPIO_PIN_SET) )
+
+//...........................................................................................................
+/**
  * @brief  FLASH AT45DB021E RDY/BUSY bit mask
  */
 #define FLASH_READ_BUSY_BIT        0x80  // RDY/BUSY bit mask
 
-void at25qf128a_get_id( void );
+//...........................................................................................................
+/**
+ * @brief  Enumeration of different FLASH actions
+*/
+typedef enum {
+    FLASH_NONE  = 0,  // Don't do any FLASH command
+    FLASH_READ  = 1,  // Execute FLASH Read Page command
+    FLASH_WRITE = 2,  // Execute FLASH Write Page command
+} enFLASH_FUNCTION;
+
+//...........................................................................................................
+/**
+ * @brief  Enumeration of different FLASH errors
+*/
+typedef enum {
+    FLASH_OK        = 0,  // No error
+    FLASH_ERROR     = 1,  // An error occurred
+    FLASH_TIMEOUT   = 2,  // A timeout error occurred
+    FLASH_SPI_ERROR = 3,  // A SPI error occurred
+    FLASH_CRC_ERROR = 4,  // CRC error occurred
+} enFLASH_ERRORS;
+
+//...........................................................................................................
+/**
+ * @brief  Enumeration erase page after reading YES or NO
+*/
+typedef enum {
+	FLASH_ERASE_NO  = 0,  // Don't erase page
+	FLASH_ERASE_YES = 1,  // Erase page
+} enFLASH_ERASE;
+
+//...........................................................................................................
+/**
+ * @brief  Enumeration number of bits (read/write)
+*/
+typedef enum {
+	BITS_8  = 0,  // 1 byte
+	BITS_16 = 1,  // 2 bytes
+	BITS_32 = 2,  // 4 bytes
+} enFLASH_BITS;
+
+//...........................................................................................................
+/**
+ * @brief  Enumeration enable/disable CRC-calc after reading page
+*/
+typedef enum {
+	FLASH_CRC_CALC_DISABLE,  // 0:
+	FLASH_CRC_CALC_ENABLE,   // 1:
+} enFLASH_CRC;
+
+//...........................................................................................................
+/**
+ * @brief  Structure for FLASH data access
+*/
+typedef struct {
+    uint8_t  flash_data[FLASH_P_SIZE];  // Data array for flash data (read or write)
+    uint8_t  value8;
+    uint16_t value16;
+} st_flash;
+
+//...........................................................................................................
+/**
+ * @brief  Structure for FLASH status bits
+*/
+typedef struct {
+    union {
+        uint8_t status;   // Status register byte 1
+        struct {
+            uint8_t page_size   : 1;  // Page size configuration  ( 0 = 264 bytes, 1 = 256 bytes )
+            uint8_t protect     : 1;  // Sector protection state  ( 0 = disabled, 1 = enabled )
+            uint8_t density     : 4;  // Density code             ( 0101 = 2-Mbit, 0111 = 4-Mbit )
+            uint8_t comp        : 1;  // Compare result           ( 0 = match, 1 = do not match )
+            uint8_t ready_busy  : 1;  // RDY/BUSY state           ( 0 = busy, 1 = ready )
+        } bits;
+    } byte_1;
+    union {
+        uint8_t status;   // Status register byte 2
+        struct {
+            uint8_t res1        : 3;  // Reserved
+            uint8_t sle         : 1;  // Sector lockdown enabled ( 0 = disabled, 1 = enabled )
+            uint8_t res2        : 1;  // Reserved
+            uint8_t epe         : 1;  // Erase/program error    ( 0 = no error detected, 1 = error detected )
+            uint8_t res3        : 1;  // Reserved
+            uint8_t rdy         : 1;  // RDY/BUSY state          ( 0 = busy, 1 = ready )
+        } bits;
+    } byte_2;
+} st_flash_state;
+
+//...........................................................................................................
+/**
+ * @brief  Extern declaration of the global structure "gst_flash"
+*/
+extern st_flash  gst_flash;
+
+
 
 #endif /* INC_AT25QF128A_H_ */

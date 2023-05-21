@@ -49,6 +49,7 @@ extern "C" {
 #include "debug.h"
 #include "revision.h"
 #include "at25qf128a.h"
+#include "flash.h"
 
 
 
