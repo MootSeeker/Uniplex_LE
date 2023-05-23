@@ -226,7 +226,10 @@ void sys_init( void )
 	#endif
 
     // Start: Initialization .................................................................................
-    flash_init( );
+
+
+
+
 
     // END: Initialization ...................................................................................
 
@@ -238,12 +241,6 @@ void sys_init( void )
 	debug_printf( "-> Hardware initialized\r\n" );
 	#endif
 }
-
-
-
-
-
-
 
 
 /* USER CODE END 4 */
