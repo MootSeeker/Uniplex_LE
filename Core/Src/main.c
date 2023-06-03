@@ -130,6 +130,17 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+
+	  // Check open Tasks???
+
+	  // Do Tasks
+
+	  // Go to Sleep
+
+
+
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

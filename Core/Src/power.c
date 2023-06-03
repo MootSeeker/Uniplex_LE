@@ -1,7 +1,7 @@
 /**
- * @file   init.c
+ * @file   power.c
  *
- * @brief  	Brief description of the content of init.c
+ * @brief  	Brief description of the content of power.c
  * @author 	kevin, Juventus Techniker Schule
  * @date   	03.06.2023 - first implementation
  * @version 1.0.0
@@ -83,92 +83,25 @@
  */
 
 
-// .............................................................................
-/**
- * @brief 	System initialization
- *
- * @param 	none
- * @retval 	HAL status
- */
-HAL_StatusTypeDef init_sys( void )
+void power_init( void )
 {
 	// Local variables
-	HAL_StatusTypeDef state = HAL_OK;  // HAL status flag
-	uint8_t  ok     = FALSE;
-	uint8_t  repeat = 0;
-	uint32_t reset  = 0;
+	enPowerSTATE state;
 
-	// Get initial tick if debug is enabled
-	#ifdef DEBUG_ON
-	uint32_t init_time = HAL_GetTick( );
-	#endif
+	// Disable battery charging module
+	HAL_PWREx_DisableBatteryCharging( );
 
-	// Define structure pointers
+	// Reduce System voltage
+	HAL_PWREx_ControlVoltageScaling( PWR_REGULATOR_VOLTAGE_SCALE2 ); //Set system voltage to 1.0V
 
-	// Store the reason for the restart
-	reset = RCC->CSR;
+	// Disable SRAM2 Content Retention
+	HAL_PWREx_DisableSRAM2ContentRetention;
 
-	// Enable Low Power mode
-	HAL_PWREx_EnableLowPowerRunMode( );
-
-    // Enable FPU settigs ...................................................................................
-	#if(__FPU_PRESENT == 1) && (__FPU_USED == 1)
-    SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2)); /* set CP10 and CP11 Full Access */
-    uint32_t fpu = SCB_GetFPUType();
-	#endif
-
-    // Print debug information ..............................................................................
-	#ifdef DEBUG_TERMINAL
-    // Show Welcome Message
-	debug_printf( WELCOME_MESSAGE );
-
-	// Show Revision
-	debug_printf( "-> FW-Revision: %d", REVISION );
-	// Show reset source
-	debug_printf( "-> Reset Value: %s", reset_cause_get_name(reset_get( )));
-    // Show Clock Speed
-    debug_printf( "-> Clock: %d", HAL_RCC_GetSysClockFreq() );
-    // Print if FPU is enabled
-    debug_printf( "-> FPU: %s", (fpu) ? "enabled" : "disabled");
-    // Initialization starts here
-    debug_printf( "\r\n-> Program started" );
-	#endif
-
-    // Start: Initialization .................................................................................
-
-    // GPIO Init
-
-    // Flash Init
-
-    // RTC Init
-
-    // Display Init
-
-    // USB Communication
-
-    // NFC Communication
-
-    // Bluetooth Communication
-
-    // Probe Init
-
-    // Data Management Init
-
-    // Interrupt management
-
-    // Powermanagement init ............................................................
-    power_init( );
-
-    // END: Initialization ...................................................................................
-
-    // Print init information ................................................................................
-	#ifdef DEBUG_TERMINAL
-	// Print time it took
-	debug_printf("--> Initialization time: %lu ms", HAL_GetTick( ) - init_time);
-	// Initialization OK
-	debug_printf( "-> Hardware initialized\r\n" );
-	#endif
-
-	// Retrun init value to system
-	return state;
+	// Disable voltage monitoring ...................................................................
+	HAL_PWREx_DisablePVM1( );
+	HAL_PWREx_DisablePVM2( );
+	HAL_PWREx_DisablePVM3( );
+	HAL_PWREx_DisablePVM4( );
 }
+
+

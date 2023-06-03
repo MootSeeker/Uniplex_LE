@@ -50,6 +50,7 @@ extern "C" {
 #include "debug.h"
 #include "revision.h"
 #include "flash.h"
+#include "power.h"
 
 
 
