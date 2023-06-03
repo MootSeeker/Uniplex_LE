@@ -136,8 +136,25 @@ HAL_StatusTypeDef init_sys( void )
 
     // Start: Initialization .................................................................................
 
+    // GPIO Init
 
+    // Flash Init
 
+    // RTC Init
+
+    // Display Init
+
+    // USB Communication
+
+    // NFC Communication
+
+    // Bluetooth Communication
+
+    // Probe Init
+
+    // Data Management Init
+
+    // Interrupt management
 
 
     // END: Initialization ...................................................................................
