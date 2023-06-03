@@ -79,6 +79,8 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
+	// Local variables
+	HAL_StatusTypeDef state;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -110,8 +112,17 @@ int main(void)
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  // Init system
-  sys_init( );
+  // Init system modules .......................................................
+  state = init_sys( );
+
+  // Check system state
+  if( HAL_OK != state )
+  {
+	  // An error occured in initilaization, system can not start!
+	  Error_Handler( );
+  }
+
+  // END of initialization .....................................................
 
   /* USER CODE END 2 */
 
@@ -173,74 +184,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
-// .............................................................................
-/**
- * @brief 	Init function
- *
- * @param 	none
- * @retval 	none
- */
-void sys_init( void )
-{
-	// Local variables
-//	HAL_StatusTypeDef state = HAL_OK;  // HAL status flag
-	uint8_t  ok     = FALSE;
-	uint8_t  repeat = 0;
-	uint32_t reset  = 0;
-
-	// Get initial tick if debug is enabled
-	#ifdef DEBUG_ON
-	uint32_t init_time = HAL_GetTick( );
-	#endif
-
-	// Define structure pointers
-
-	// Store the reason for the restart
-	reset = RCC->CSR;
-
-	// Enable Low Power mode
-	HAL_PWREx_EnableLowPowerRunMode( );
-
-    // Enable FPU settigs ...................................................................................
-	#if(__FPU_PRESENT == 1) && (__FPU_USED == 1)
-    SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2)); /* set CP10 and CP11 Full Access */
-    uint32_t fpu = SCB_GetFPUType();
-	#endif
-
-    // Print debug information ..............................................................................
-	#ifdef DEBUG_TERMINAL
-    // Show Welcome Message
-	debug_printf( WELCOME_MESSAGE );
-
-	// Show Revision
-	debug_printf( "-> FW-Revision: %d", REVISION );
-	// Show reset source
-	debug_printf( "-> Reset Value: %s", reset_cause_get_name(reset_get( )));
-    // Show Clock Speed
-    debug_printf( "-> Clock: %d", HAL_RCC_GetSysClockFreq() );
-    // Print if FPU is enabled
-    debug_printf( "-> FPU: %s", (fpu) ? "enabled" : "disabled");
-    // Initialization starts here
-    debug_printf( "\r\n-> Program started" );
-	#endif
-
-    // Start: Initialization .................................................................................
-
-
-
-
-
-    // END: Initialization ...................................................................................
-
-    // Print init information ................................................................................
-	#ifdef DEBUG_TERMINAL
-	// Print time it took
-	debug_printf("--> Initialization time: %lu ms", HAL_GetTick( ) - init_time);
-	// Initialization OK
-	debug_printf( "-> Hardware initialized\r\n" );
-	#endif
-}
 
 
 /* USER CODE END 4 */

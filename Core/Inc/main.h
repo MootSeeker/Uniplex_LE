@@ -46,6 +46,7 @@ extern "C" {
 #include "gpio.h"
 
 // Private includes ...........................................................
+#include "init.h"
 #include "debug.h"
 #include "revision.h"
 #include "flash.h"
