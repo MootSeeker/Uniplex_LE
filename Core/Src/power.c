@@ -86,7 +86,6 @@
 void power_init( void )
 {
 	// Local variables
-	enPowerSTATE state;
 
 	// Disable battery charging module
 	HAL_PWREx_DisableBatteryCharging( );
@@ -95,11 +94,10 @@ void power_init( void )
 	HAL_PWREx_ControlVoltageScaling( PWR_REGULATOR_VOLTAGE_SCALE2 ); //Set system voltage to 1.0V
 
 	// Disable SRAM2 Content Retention
-	HAL_PWREx_DisableSRAM2ContentRetention;
+	HAL_PWREx_DisableSRAM2ContentRetention( );
 
 	// Disable voltage monitoring ...................................................................
 	HAL_PWREx_DisablePVM1( );
-	HAL_PWREx_DisablePVM2( );
 	HAL_PWREx_DisablePVM3( );
 	HAL_PWREx_DisablePVM4( );
 }

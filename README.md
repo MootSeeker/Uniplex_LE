@@ -1,52 +1,38 @@
 # Uniplex_LE
-Lightweight version of Uniplex system
+Uniplex_LE
+#Introduction
+Welcome to Uniplex_LE, the Lightweight version of the Uniplex system. This repository focuses on achieving an extremely low power consumption for efficient energy usage. We have applied power-saving principles to both hardware and firmware components to ensure optimal performance while minimizing power consumption.
 
-"Uniplex LE" ist ein Github-Repository, das eine Firmware für die Plattform mit einem STM32-Mikrocontroller enthält.
-Die Firmware ermöglicht die Steuerung und Integration verschiedener Komponenten wie TFT-Touchscreen-Display, RTC, USB- und NFC-Schnittstellen, Bluetooth-Kommunikation sowie Temperatur- und Feuchtigkeitssensoren.
-Das Hauptziel des Projekts ist es, eine energieeffiziente Lösung mit niedrigem Stromverbrauch zu entwickeln, was besonders für batteriebetriebene Anwendungen von Vorteil ist.
+#Features
+The Uniplex_LE system incorporates the following key features to achieve low power consumption:
 
-## Inhaltsverzeichnis
+Hardware Power Optimization: We have implemented hardware optimizations to ensure minimal power usage in the system.
+Firmware Low Power Modes: The firmware utilizes low power modes and interrupt controls to achieve deep power savings.
+Interrupts: The system supports various interrupts, including RTC, USB, Display, and Button.
 
-- [Beschreibung](#beschreibung)
-- [Features](#features)
-- [Installation](#installation)
-- [Verwendung](#verwendung)
-- [Beitragende](#beitragende)
-- [Lizenz](#lizenz)
+#Interrupts Explanation
+Here's a breakdown of how each interrupt is handled:
 
-## Beschreibung
+RTC Interrupt: When triggered by the Real-Time Clock (RTC), the device wakes up to read and store a measurement value. The data is then saved in a log file, which can be accessed via USB or NFC for further analysis.
+USB Interrupt: Upon a USB interrupt, the device is ready to communicate with external systems. It responds to commands promptly and returns to sleep mode to conserve power.
+Display Interrupt: When a display interrupt occurs, the device is awakened from sleep mode, and the display is turned on. After 10 seconds of inactivity, the display automatically turns off to save power.
+Button Interrupt: Similar to the display interrupt, a button interrupt wakes up the device, turns on the display, and follows the same power-saving behavior after a period of inactivity.
+Power Consumption Goals
+Our primary goal is to achieve an average power consumption of a maximum of 1mA, considering the fastest interval of 10 seconds and the slowest interval of 24 hours.
 
-Dieses Repository enthält die Firmware für eine Plattform, die auf einem STM32-Mikrocontroller basiert. Die Firmware ist in C geschrieben und ermöglicht die Steuerung verschiedener Komponenten, darunter:
+#How to Contribute
+We welcome contributions from the community to enhance the Uniplex_LE system. To contribute, please follow these steps:
 
-- TFT-Display mit Touchscreen: Das TFT-Display mit Touchscreen ermöglicht die allgemeine Steuerung der Benutzeroberfläche und die Anzeige von Messwerten. Durch die Berührung des Displays können Benutzerinteraktionen durchgeführt werden.
+Fork this repository and clone it to your local machine.
+Implement your modifications or optimizations in the codebase.
+Ensure that your code adheres to best practices and includes appropriate documentation.
+Submit a pull request detailing the changes you made.
 
-- RTC (Echtzeituhr): Die RTC stellt die aktuelle Zeit für das System bereit. Sie ermöglicht die Zeitsynchronisation und die Verwendung von Zeitstempeln für verschiedene Anwendungen innerhalb der Plattform.
+#Support and Feedback
+If you have any questions, feedback, or require assistance, please don't hesitate to reach out to us. You can contact the maintainers at [maintainer@email.com].
 
-- USB-Schnittstelle: Die USB-Schnittstelle dient als allgemeine Kommunikationsschnittstelle für das System. Zusätzlich fungiert sie als Ladeanschluss für die Batterie, sodass die Plattform über USB aufgeladen werden kann.
+We appreciate your interest in Uniplex_LE and look forward to your contributions. Together, let's make a significant impact in achieving optimal power consumption!
 
-- NFC-Schnittstelle: Die NFC-Schnittstelle ermöglicht die Verbindung der Bluetooth-Schnittstelle mit NDEF (NFC Data Exchange Format). Dadurch können Daten zwischen der Plattform und anderen NFC-fähigen Geräten drahtlos ausgetauscht werden.
+Happy coding!
 
-- Bluetooth: Die Bluetooth-Funktion ermöglicht eine schnelle drahtlose Kommunikation mit anderen Bluetooth-fähigen Geräten. Dies eröffnet Möglichkeiten für die Datenübertragung, Fernsteuerung und drahtlose Konnektivität zu anderen Systemen.
-
-- Temperatur- und Feuchtigkeitssensoren: Zwei Sensoren werden verwendet, um präzise Temperatur- und Feuchtigkeitsmessungen durchzuführen. Die Daten können für Überwachungszwecke oder zur Steuerung anderer Systemkomponenten verwendet werden.
-
-- Flash-Speicher: Der Flash-Speicher dient zur Speicherung von Daten und Programmcodes.
-
-- Batterieüberwachung: Die Batterieüberwachungsfunktion ermöglicht die Überwachung des Batteriestatus und die Erfassung wichtiger Parameter wie Spannung und Ladestand, um eine effiziente Nutzung der Batterie zu gewährleisten.
-
-Das Hauptziel dieser Schaltung ist es, einen möglichst geringen Stromverbrauch zu erreichen. Durch die Implementierung von Stromsparmechanismen und Optimierungen wird die Energieeffizienz maximiert, was insbesondere für batteriebetriebene Anwendungen von Vorteil ist.
-
-
-## Features
-
-Liste hier die Hauptfeatures oder Funktionen deines Projekts auf. Dies ermöglicht es anderen Benutzern, schnell zu verstehen, was dein Projekt kann.
-
-## Installation
-
-Beschreibe hier die Schritte, die erforderlich sind, um dein Projekt lokal zum Laufen zu bringen. Dies beinhaltet normalerweise das Klonen des Repositories, die Installation von Abhängigkeiten und die Konfiguration von Umgebungsvariablen.
-
-```bash
-$ git clone https://github.com/DeinBenutzername/DeinRepository.git
-$ cd DeinRepository
-$ npm install  # oder die entsprechenden Befehle für deine Sprache/Umgebung
-
+The Uniplex_LE Team
