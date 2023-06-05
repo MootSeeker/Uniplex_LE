@@ -27,6 +27,23 @@ void handler_init( void )
 	pst_line->line_end = -1;
 }
 
+void handler_line( void )
+{
+    if (LINE_EMPTY != handler_isLineEmpty())
+    {
+        // Eine Aufgabe ist vorhanden
+        Task task = dequeue();
+        // Führe die Aufgabe aus, z. B. Messwert lesen oder Display lesen
+        // ...
+    }
+    else
+    {
+        // Line is empty
+    	// Go to sleep ....................................................
+    	HAL_PWREx_EnableInternalWakeUpLine( );
+    	HAL_PWR_EnterSTOPMode( PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI );
+    }
+}
 
 void handler_add_task( void )
 {
@@ -34,7 +51,6 @@ void handler_add_task( void )
 
 	// Define struct pointer
 	st_line *pst_line = &gst_line;
-	st_task *pst_task = &gst_task;
 
 	// Check if Line is full
 	if( LINE_FULL == handler_isLineFull( ))
@@ -53,7 +69,7 @@ void handler_add_task( void )
 	}
 
 	// Add new Task at the new end position
-	pst_line->line[ pst_line->line_end ] = pst_task->task_id;
+	pst_line->line[ pst_line->line_end ] = gst_task;
 }
 
 
@@ -74,7 +90,7 @@ enTaskId handler_rem_task( enTaskId task )
 	}
 
 	// Copy latest task
-	pst_task->task_latest = pst_line->line[ pst_line->line_start ];
+	pst_task->task_latest = handler_getTask(pst_line->line[ pst_line->line_start ]);
 
 	// Check if all Tasks removed
 	if( pst_line->line_start == pst_line->line_end )
@@ -105,4 +121,25 @@ enLineState handler_isLineFull( void )
 	return ((pst_line->line_start + 1) % QUEUE_SIZE_MAX == pst_line->line_start) ? LINE_FULL : LINE_EMPTY;
 }
 
+enTaskId handler_getTask( st_task task )
+{
+	switch(task.task_latest)
+	{
+		case TASK1:
+			return TASK1;
+		break;
+
+		case TASK2:
+			return TASK2;
+		break;
+
+		case TASK_NFC:
+			return TASK_NFC;
+		break;
+
+		default:
+			return TASK_EMPTY;
+		break;
+	}
+}
 

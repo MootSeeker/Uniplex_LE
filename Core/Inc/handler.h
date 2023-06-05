@@ -23,7 +23,7 @@ typedef enum
 {
 	TASK1,
 	TASK2,
-	TASK3,
+	TASK_NFC,
 	TASK_EMPTY, 	// No Task available
 }enTaskId;
 
@@ -51,10 +51,11 @@ extern st_task gst_task;
 
 
 void handler_init( void );
+void handler_line( void );
 void handler_add_task( void );
 enTaskId handler_rem_task( enTaskId task );
 enLineState handler_isLineEmpty( void );
 enLineState handler_isLineFull( void );
-
+enTaskId handler_getTask( st_task );
 
 #endif /* INC_HANDLER_H_ */
