@@ -51,6 +51,7 @@ extern "C" {
 #include "revision.h"
 #include "flash.h"
 #include "power.h"
+#include "handler.h"
 
 
 

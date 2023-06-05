@@ -55,15 +55,6 @@
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
-// .............................................................................
-/**
- * @brief 	Init function
- *
- * @param 	none
- * @retval 	none
- */
-void sys_init( void );
-
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -135,6 +126,7 @@ int main(void)
 	  // Check open Tasks???
 
 	  // Do Tasks
+
 
 	  // Go to Sleep
 
