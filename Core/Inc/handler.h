@@ -57,5 +57,6 @@ enTaskId handler_rem_task( enTaskId task );
 enLineState handler_isLineEmpty( void );
 enLineState handler_isLineFull( void );
 enTaskId handler_getTask( st_task );
+void handler_process( enTaskId task );
 
 #endif /* INC_HANDLER_H_ */

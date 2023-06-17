@@ -29,12 +29,11 @@ void handler_init( void )
 
 void handler_line( void )
 {
+	st_task *pst_task = &gst_task;
+
     if (LINE_EMPTY != handler_isLineEmpty())
     {
-        // Eine Aufgabe ist vorhanden
-        Task task = dequeue();
-        // Führe die Aufgabe aus, z. B. Messwert lesen oder Display lesen
-        // ...
+    	handler_process( pst_task->task_latest ); // Do task
     }
     else
     {
@@ -143,3 +142,7 @@ enTaskId handler_getTask( st_task task )
 	}
 }
 
+void handler_process( enTaskId task )
+{
+	// Do handler magic
+}
